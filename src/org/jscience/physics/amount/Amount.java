@@ -117,11 +117,9 @@ public final class Amount<Q extends Quantity> implements
     ///////////////////
     // Lookup tables //
     ///////////////////
-
     /**
      * 31-08-2016 delyerrods: specifying the fastmaps as protected to have a better access to it.
      */
-    //FIXME remove final, create an initialization block, catch the exceptions and continue...
     protected static FastMap<Unit<?>, FastMap<Unit<?>, Unit<?>>> MULT_LOOKUP;
 
     protected static FastMap<Unit<?>, Unit<?>> INV_LOOKUP;
@@ -130,29 +128,20 @@ public final class Amount<Q extends Quantity> implements
 
     //Cleaning the heap from previous runs if applicable and creating the new similarly to how jscience did it.
     static {
-    	//Recycling first...
-    	if (MULT_LOOKUP != null){ FastMap.recycle(MULT_LOOKUP); }
-    	if (INV_LOOKUP != null ) { FastMap.recycle(INV_LOOKUP); }
-    	if (CVTR_LOOKUP != null ) { FastMap.recycle(CVTR_LOOKUP); }
-    	
     	//Initializating...
-    	MULT_LOOKUP = new FastMap<Unit<?>, FastMap<Unit<?>, Unit<?>>>(
+    	if (MULT_LOOKUP == null){ 
+    		MULT_LOOKUP = new FastMap<Unit<?>, FastMap<Unit<?>, Unit<?>>>(
     	            "UNITS_MULT_LOOKUP").setKeyComparator(FastComparator.DIRECT);
-    	
-    	INV_LOOKUP = new FastMap<Unit<?>, Unit<?>>(
+    	}
+    	if (INV_LOOKUP == null ) { 
+    		INV_LOOKUP = new FastMap<Unit<?>, Unit<?>>(
     	            "UNITS_INV_LOOKUP").setKeyComparator(FastComparator.DIRECT);
-    	 
-    	CVTR_LOOKUP = new FastMap<Unit<?>, FastMap<Unit<?>, UnitConverter>>(
-    	            "UNITS_CVTR_LOOKUP").setKeyComparator(FastComparator.DIRECT);
+    	}
+    	if (CVTR_LOOKUP == null ) { 
+    		CVTR_LOOKUP = new FastMap<Unit<?>, FastMap<Unit<?>, UnitConverter>>(
+    	            "UNITS_CVTR_LOOKUP").setKeyComparator(FastComparator.DIRECT);	
+    	}
     }
-
-	@Override
-	protected void finalize() throws Throwable {
-		//Is not 100% sure that the JVM will call finalize when it removes the object...
-		if (MULT_LOOKUP != null){ FastMap.recycle(MULT_LOOKUP); }
-    	if (INV_LOOKUP != null ) { FastMap.recycle(INV_LOOKUP); }
-    	if (CVTR_LOOKUP != null ) { FastMap.recycle(CVTR_LOOKUP); }
-	}
 
     /**
      * Holds the default XML representation for measures.
