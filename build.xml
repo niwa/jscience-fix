@@ -86,7 +86,7 @@
     </target>
 
     <target name="jarfile" depends="compile">
-        <jar jarfile="${library}.jar"
+        <jar jarfile="${library}-${version}.${release}.jar"
              basedir="${bin}"
              update="false">
              <manifest>
@@ -145,6 +145,7 @@
         <delete dir="${bin}" />
         <delete dir="${api}" />
         <delete file="${library}.jar"/>
+		<delete file="${library}-${version}.${release}.jar"/>
         <delete file="${library}-${version}.${release}-src.zip"/>
         <delete file="${library}-${version}.${release}-bin.zip"/>
     </target>
